@@ -4,8 +4,18 @@
         <script src='https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
         <link href='https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />
         <link href='style.css' rel='stylesheet'>
+        <title>Flood Watch</title>
     </head>
     <body>
+        <div>
+            <h1>Flood Watch</h1>
+            <select>
+                <option value="2020">2020</option>
+                <option value="2050">2050</option>
+                <option value="2080">2080</option>
+                <option value="2100">2100</option>
+            </select>
+        </div>
         <div id='map'></div>
         <script>
             mapboxgl.accessToken = 'pk.eyJ1IjoiamFja2Nvb2szNiIsImEiOiJjajhybmFpZmQweG45MndxaTA5bWZzdHM0In0.TMB_ZQ0YiCwQNjA3ihOQ4A';
@@ -18,4 +28,5 @@
             map.addControl(new mapboxgl.NavigationControl());
         </script>
     </body>
+
 </html>
