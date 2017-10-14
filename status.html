@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src='https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />
+        <link href='status.css' rel='stylesheet'>
+        <title>Status</title>
+    </head>
+<body>
+    <div id='map'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamFja2Nvb2szNiIsImEiOiJjajhybmFpZmQweG45MndxaTA5bWZzdHM0In0.TMB_ZQ0YiCwQNjA3ihOQ4A';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/jackcook36/cj8roqx69bon22rpf45j7b5zp',
+            center: [-73.9654, 40.7829],
+            zoom: 10
+        });
+        map.addControl(new mapboxgl.NavigationControl());
+    </script>
+
+    <h1>Insert Something Funny</h1>
+    <h2>Paragraph of status</h2>
+
+    <h3>Preparation for the Flood</h3>
+
+    <h4>1. Know Your Risk</h4>
+        <p>Check your flood risk</p>
+
+    <h4>2. Emergency Kit</h4>
+        <p>Recommended but not limited to: </br>Food</br>Water</br>Medicine</br>Batteries</br>Flashlights</p>
+    <h4>3. Evacuation Plan</h4>
+        <p>Relocate to safer grounds</p>
+</body>
+
+</html>

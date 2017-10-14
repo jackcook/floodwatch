@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+#map {
+    margin: 40px auto;
+    width: 90%;
+    height: 50%;
+}
+
+
+h1 {
+    margin: 50px 100px 0px;
+    padding:10px;
+    text-align: center;
+    color: black;
+    font-family: Arial;
+    font-size: 50px;
+    font-weight: bolder;
+}
+
+h2 {
+    margin:20px 200px;
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    font-family: Arial;
+    font-weight: normal;
+}
+
+h3 {
+    font-family: Arial;
+    font-size: 40px;
+    font-weight: bolder;
+    margin: 200px 100px;
+    text-align: center;
+}

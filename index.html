@@ -8,7 +8,6 @@
     </head>
     <body>
         <div>
-            <h1>Flood Watch</h1>
             <select id="year">
                 <option value="cj8roqx69bon22rpf45j7b5zp">2020-2in</option>
                 <option value="cj8rpspqm46nc2smyxpm8yka3">2020-10in</option>
@@ -25,7 +24,7 @@
                 zoom: 10
             });
             map.addControl(new mapboxgl.NavigationControl());
-            
+
             var yearSelector = document.getElementById("year");
             yearSelector.onchange = function(selection) {
                 var styleId = selection.target[selection.target.selectedIndex].value;
