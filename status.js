@@ -51,25 +51,44 @@ function checkStatus(coordinates) {
     var point = map.project({lat: coordinates.lat, lng: coordinates.lng});
     var features = map.queryRenderedFeatures(point);
 
-    var underwater = false;
+    var flood_zones = [];
 
     for (var i = 0; i < features.length; i++) {
         var feature = features[i];
         var id = feature["layer"]["id"];
 
-        if (features[i]["layer"]["id"] == "dcp-wos-slr2100s75in-72a32u") {
-            underwater = true;
-            break;
+        // this is the format for a custom tileset id
+        var dcp_regex = /dcp-wos-slr(\d{4})s(\d{2})in-[\w]{6}/;
+        var matches = id.match(dcp_regex);
+
+        if (matches && matches.length == 3) {		
+            var year = parseInt(matches[1]);		
+            var inches = parseInt(matches[2]);		
+            		
+            flood_zones.push({		
+                "year": year,		
+                "inches": inches		
+            });
         }
     }
 
-    map.panTo(coordinates);
-    updateText(underwater);
+    if (map.getZoom() == 13) {
+        map.panTo(coordinates);
+    } else {
+        map.flyTo({center: coordinates, zoom: 13});
+    }
+
+    updateText(flood_zones);
 }
 
-function updateText(underwater) {
-    if (underwater) {
-        document.getElementById("title").innerHTML = "We hope you're taking swimming lessons";
+function updateText(flood_zones) {
+    if (flood_zones.length > 0) {
+        var underwater_titles = [
+            "We hope you're taking swimming lessons",
+            "Have you bought your life raft yet?"
+        ];
+        
+        document.getElementById("title").innerHTML = underwater_titles[Math.floor(Math.random() * underwater_titles.length)];
     } else {
         document.getElementById("title").innerHTML = "You should be safe"
     }
@@ -136,7 +155,7 @@ var coordinates = [
     [-73.90087575096457, 40.82733480011778],
     [-74.21396005256327, 40.54198980345471],
     [-74.07901917090253, 40.64282884762186]
-]
+];
 
 function closestShelter() {
     var minX, minY = 0;
