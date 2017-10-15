@@ -93,7 +93,7 @@ function checkStatus(coordinates) {
 
     currentCoords = coordinates;
 
-    moveToPoint(coordinates);
+    moveToPoint(coordinates, false);
     updateText(flood_zones);
     
     displayAnimatedImage(flood_zones.length > 0);
@@ -196,11 +196,15 @@ function addPoint(id, coordinates, icon) {
     return id + random_num;
 }
 
-function moveToPoint(coordinates) {
-    if (map.getZoom() == defaultZoomFactor) {
-        map.panTo(coordinates);
+function moveToPoint(coordinates, zoom) {
+    if (zoom) {
+        if (map.getZoom() == defaultZoomFactor) {
+            map.panTo(coordinates);
+        } else {
+            map.flyTo({center: coordinates, zoom: defaultZoomFactor});
+        }
     } else {
-        map.flyTo({center: coordinates, zoom: defaultZoomFactor});
+        map.panTo(coordinates);
     }
 }
 
@@ -292,7 +296,7 @@ function findNearestShelter() {
 
 function panToClosestShelter() {
     var coordinates = findNearestShelter().coordinates;
-    moveToPoint(coordinates);
+    moveToPoint(coordinates, true);
 }
 
 function calculateRoute(from, to, callback) {
