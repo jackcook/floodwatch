@@ -73,15 +73,18 @@ function checkStatus(coordinates) {
 
     moveToPoint(coordinates);
     updateText(flood_zones);
+    
+    displayAnimatedImage(flood_zones.length > 0);
 }
 
 function updateText(flood_zones) {
-    document.getElementById("status").innerHTML = "Loading...";
+    document.getElementById("status").innerHTML = "";
 
     if (flood_zones.length > 0) {
         var underwater_titles = [
             "We hope you're taking swimming lessons",
-            "Have you bought your life raft yet?"
+            "Have you bought your life raft yet?",
+            "Get ready to dive in"
         ];
 
         document.getElementById("title").innerHTML = underwater_titles[Math.floor(Math.random() * underwater_titles.length)];
@@ -118,17 +121,25 @@ function updateText(flood_zones) {
                     year_text = "<strong>in three years</strong>";
                 }
 
+<<<<<<< HEAD
                 var shelter = findNearestShelter();
                 calculateRoute(currentCoords, shelter.coordinates, function(minutes) {
                     document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter at " + shelter.name + ". The fastest route there takes " + minutes + " minutes by car. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
+=======
+                var shelterCoords = findNearestShelter();
+                calculateRoute(currentCoords, shelterCoords, function(minutes) {
+                    document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes " + minutes + " minutes by car. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
+                    document.getElementById("status").style.textAlign = "justify";
+>>>>>>> a6aaec5fd6f88a51b50502a428da980ea5a81f66
                 });
 
                 break;
             }
         }
     } else {
-        document.getElementById("title").innerHTML = "You should be safe";
+        document.getElementById("title").innerHTML = "It looks like you're safe";
         document.getElementById("status").innerHTML = "You'll be okay... for now.";
+        document.getElementById("status").style.textAlign = "center";
     }
 }
 
@@ -279,4 +290,18 @@ function calculateRoute(from, to, callback) {
         var minutes = parseInt(result.routes[0].legs[0].duration.value / 60);
         callback(minutes);
     });
+}
+
+function displayAnimatedImage(flood) {
+    var offset = Math.floor(Math.random() * 50);
+    var query = flood ? "flood" : "happy";
+    
+    var req = new XMLHttpRequest();
+    req.open("GET", "https://api.giphy.com/v1/gifs/search?api_key=Zfa9rq145Mi27M0tk4SidKkliNxDl11v&q=" + query + "&limit=1&offset=" + offset + "&rating=G&lang=en");
+    req.send();
+    
+    req.onload = function() {
+        var imageUrl = JSON.parse(req.responseText)["data"][0]["images"]["original"]["url"];
+        document.getElementById("animated").setAttribute("src", imageUrl);
+    };
 }
