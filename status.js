@@ -1,5 +1,7 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiamFja2Nvb2szNiIsImEiOiJjajhybmFpZmQweG45MndxaTA5bWZzdHM0In0.TMB_ZQ0YiCwQNjA3ihOQ4A';
 
+var defaultZoomFactor = 13;
+
 var url = new URL(window.location.href);
 var lat = parseFloat(url.searchParams.get("lat"));
 var lng = parseFloat(url.searchParams.get("lng"));
@@ -8,7 +10,7 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/jackcook36/cj8s0ki30748b2rmi7mmcmg0t',
     center: [lng, lat],
-    zoom: 13
+    zoom: defaultZoomFactor
 });
 
 var point_feature_id = 0;
@@ -96,10 +98,10 @@ function addPoint(id, coordinates) {
 }
 
 function moveToPoint(coordinates) {
-    if (map.getZoom() == 13) {
+    if (map.getZoom() == defaultZoomFactor) {
         map.panTo(coordinates);
     } else {
-        map.flyTo({center: coordinates, zoom: 13});
+        map.flyTo({center: coordinates, zoom: defaultZoomFactor});
     }
 }
 
