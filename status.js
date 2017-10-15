@@ -51,15 +51,24 @@ function checkStatus(coordinates) {
     var point = map.project({lat: coordinates.lat, lng: coordinates.lng});
     var features = map.queryRenderedFeatures(point);
     
-    var underwater = false;
+    var flood_zones = [];
     
     for (var i = 0; i < features.length; i++) {
         var feature = features[i];
         var id = feature["layer"]["id"];
         
-        if (features[i]["layer"]["id"] == "dcp-wos-slr2100s75in-72a32u") {
-            underwater = true;
-            break;
+        // this is the format for a custom tileset id
+        var dcp_regex = /dcp-wos-slr(\d{4})s(\d{2})in-[\w]{6}/;
+        var matches = id.match(dcp_regex);
+        
+        if (matches && matches.length == 3) {
+            var year = parseInt(matches[1]);
+            var inches = parseInt(matches[2]);
+            
+            flood_zones.push({
+                "year": year,
+                "inches": inches
+            });
         }
     }
     
@@ -69,12 +78,13 @@ function checkStatus(coordinates) {
         map.flyTo({center: coordinates, zoom: 13});
     }
     
-    updateText(underwater);
+    updateText(flood_zones);
 }
 
-function updateText(underwater) {
-    if (underwater) {
+function updateText(flood_zones) {
+    if (flood_zones.length > 0) {
         document.getElementById("title").innerHTML = "We hope you're taking swimming lessons";
+        document.getElementById("status").innerHTML = "You're in " + flood_zones.length + " flood zones";
     } else {
         document.getElementById("title").innerHTML = "You should be safe"
     }
