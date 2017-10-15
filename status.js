@@ -6,11 +6,15 @@ var url = new URL(window.location.href);
 var lat = parseFloat(url.searchParams.get("lat"));
 var lng = parseFloat(url.searchParams.get("lng"));
 
+var currentCoords = {};
+var shelterCoords = {};
+
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/jackcook36/cj8s0ki30748b2rmi7mmcmg0t',
     center: [lng, lat],
-    zoom: defaultZoomFactor
+    zoom: defaultZoomFactor,
+    minZoom: 11
 });
 
 var point_feature_id = 0;
@@ -20,8 +24,7 @@ map.addControl(new mapboxgl.NavigationControl());
 map.on('load', function () {
     var coordinates = {lat: lat, lng: lng};
     checkStatus(coordinates);
-
-    findClosestShelter();
+    findShelter(false);
 });
 
 map.on("click", function (e) {
@@ -34,7 +37,7 @@ function checkStatus(coordinates) {
         point_feature_id += 1;
     }
 
-    addPoint("location" + point_feature_id, coordinates, "circle-15");
+    addPoint("location" + point_feature_id, coordinates, "star-15");
 
     var point = map.project({lat: coordinates.lat, lng: coordinates.lng});
     var features = map.queryRenderedFeatures(point);
@@ -105,8 +108,15 @@ function updateText(flood_zones) {
         
         for (var i = 0; i < probability_objects.length; i++) {
             var probability = probability_objects[i].probability;
+            var year = probability_objects[i].year;
             if (probability > 0) {
-                document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged by the year " + probability_objects[i].year + ".";
+                var year_text = "by the year " + probability_objects[i].year;
+                
+                if (year == 2020) {
+                    year_text = "<strong>in three years</strong>";
+                }
+                
+                document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes 24 minutes. (<a href=\"#\" onclick=\"findShelter(true)\">See on map</a>)";
                 break;
             }
         }
@@ -207,7 +217,12 @@ var coordinates = [
     [-74.07901917090253, 40.64282884762186]
 ];
 
-function findClosestShelter() {
+function findShelter(move) {
+    if (move) {
+        moveToPoint(shelterCoords);
+        return;
+    }
+    
     var minX, minY = 0;
     var min = Number.MAX_SAFE_INTEGER;
 
@@ -223,10 +238,6 @@ function findClosestShelter() {
         }
     }
 
-    addPoint("shelter", {lat: minY, lng: minX}, "hospital-15");
-
-    // var midpointX = (minX + lng)/2;
-    // var midpointY = (minY + lat)/2;
-    //
-    // moveToPoint({lat: midpointY, lng: midpointX});
+    shelterCoords = {lat: minY, lng: minX};
+    addPoint("shelter", shelterCoords, "hospital-15");
 }
