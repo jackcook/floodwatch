@@ -104,6 +104,8 @@ function updateText(flood_zones) {
     document.getElementById("status").innerHTML = "";
 
     if (flood_zones.length > 0) {
+        document.getElementById("text").style.display = "block";
+        
         var underwater_titles = [
             "We hope you're taking swimming lessons",
             "Have you bought your life raft yet?",
@@ -157,6 +159,7 @@ function updateText(flood_zones) {
         document.getElementById("title").innerHTML = "It looks like you're safe";
         document.getElementById("status").innerHTML = "You'll be okay... for now.";
         document.getElementById("status").style.textAlign = "center";
+        document.getElementById("text").style.display = "none";
     }
 }
 
