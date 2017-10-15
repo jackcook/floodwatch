@@ -121,16 +121,10 @@ function updateText(flood_zones) {
                     year_text = "<strong>in three years</strong>";
                 }
 
-<<<<<<< HEAD
                 var shelter = findNearestShelter();
                 calculateRoute(currentCoords, shelter.coordinates, function(minutes) {
                     document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter at " + shelter.name + ". The fastest route there takes " + minutes + " minutes by car. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
-=======
-                var shelterCoords = findNearestShelter();
-                calculateRoute(currentCoords, shelterCoords, function(minutes) {
-                    document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes " + minutes + " minutes by car. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
                     document.getElementById("status").style.textAlign = "justify";
->>>>>>> a6aaec5fd6f88a51b50502a428da980ea5a81f66
                 });
 
                 break;
@@ -175,7 +169,7 @@ function moveToPoint(coordinates) {
     }
 }
 
-var coordinates = [
+var shelters = [
     [-73.96648921670807, 40.649708582993064, "PS 249\n18 Marlborough Road, Brooklyn, NY 11226"],
     [-73.86622748089125, 40.838205858215275, "PS 102\n1827 Archer Street, Bronx, NY 10460"],
     [-73.96139358097575, 40.6688589933076, "Clara Barton HS\n901 Classon Avenue, Brooklyn, NY 11225"],
@@ -239,8 +233,8 @@ var coordinates = [
 ];
 
 function generateShelters() {
-    for (var i in coordinates) {
-        var coords = {lat: coordinates[i][1], lng: coordinates[i][0]};
+    for (var i in shelters) {
+        var coords = {lat: shelters[i][1], lng: shelters[i][0]};
         addPoint("shelter", coords, "hospital-15");
     }
 }
@@ -249,8 +243,8 @@ function findNearestShelter() {
     var minShelter;
     var min = Number.MAX_SAFE_INTEGER;
 
-    for (var i in coordinates) {
-        var coords = {lat: coordinates[i][1], lng: coordinates[i][0]};
+    for (var i in shelters) {
+        var coords = {lat: shelters[i][1], lng: shelters[i][0]};
         addPoint("shelter", coords, "hospital-15");
 
         var x = coords.lng - currentCoords.lng;
@@ -259,7 +253,7 @@ function findNearestShelter() {
 
         if (distance < min) {
             min = distance;
-            minShelter = coordinates[i];
+            minShelter = shelters[i];
         }
     }
 
