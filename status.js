@@ -305,3 +305,16 @@ function displayAnimatedImage(flood) {
         document.getElementById("animated").setAttribute("src", imageUrl);
     };
 }
+
+function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("searchbar"), {types: ["geocode"]});
+    autocomplete.addListener("place_changed", fillInAddress);
+}
+
+function fillInAddress() {
+    var place = autocomplete.getPlace();
+    var lat = place.geometry.location.lat();
+    var lng = place.geometry.location.lng();
+
+    location.href = "status.html?lat=" + lat + "&lng=" + lng;
+}

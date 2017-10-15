@@ -23,6 +23,17 @@ body {
     height: 320px;
 }
 
+#searchbar {
+    float: left;
+    position: relative;
+    top: -296px;
+    left: 24px;
+    width: 384px;
+    height: 42px;
+    font-size: 18px;
+    padding: 0 12px;
+}
+
 #text-container {
     font-family: Arial, Helvetica, sans-serif;
     padding: 48px 120px;

@@ -9,6 +9,7 @@
 <body>
     <div id="container">
         <div id="map"></div>
+        <input id="searchbar" placeholder="Enter your address" type="text"></input>
         <div id="text-container">
             <h1 id="title"></h1>
             <p id="status"></p>
@@ -37,6 +38,6 @@
         </div>
     </div>
     <script src="status.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwnAQOoV_y2jFzd1pFa-J914I_nqbEqaI" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwnAQOoV_y2jFzd1pFa-J914I_nqbEqaI&libraries=places&callback=initAutocomplete" async defer></script>
 </body>
 </html>
