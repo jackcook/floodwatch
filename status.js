@@ -18,6 +18,8 @@ map.addControl(new mapboxgl.NavigationControl());
 map.on('load', function () {
     var coordinates = {lat: lat, lng: lng};
     checkStatus(coordinates);
+
+    closestShelter();
 });
 
 map.on("click", function (e) {
@@ -142,19 +144,38 @@ function closestShelter() {
     var minX, minY = 0;
     var min = Number.MAX_SAFE_INTEGER;
     for (var i in coordinates){
-        var x = (coordinates[i][0] - lat);
-        var y = (coordinates[i][1] - lng);
+        var x = (coordinates[i][0] - lng);
+        var y = (coordinates[i][1] - lat);
         var distance = Math.sqrt(x*x + y*y);
 
         if (distance < min) {
             min = distance;
-            minX = x;
-            minY = y;
+            minX = coordinates[i][0];
+            minY = coordinates[i][1];
         }
     }
+
+    map.addLayer({
+        "id": "shelter",
+        "type": "symbol",
+        "source": {
+            "type": "geojson",
+            "data": {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [minX, minY]
+                }
+            }
+        },
+        "layout": {
+            "icon-image": "circle-15"
+        }
+    });
+
+    var midpointX = (minX + lng)/2;
+    var midpointY = (minY + lat)/2;
 
     console.log(minX, minY);
 
 }
-
-closestShelter();
