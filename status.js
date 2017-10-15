@@ -50,12 +50,20 @@ function checkStatus(coordinates) {
         var matches = id.match(dcp_regex);
 
         if (matches && matches.length == 3) {
-            var year = parseInt(matches[1]);
+            var year = parseInt(matches[1]);	
             var inches = parseInt(matches[2]);
+            
+            var probabilities = {
+                2020: {2: 0.9, 4: 0.75, 6: 0.5, 8: 0.25, 10: 0.1},
+                2050: {8: 0.9, 11: 0.75, 16: 0.5, 21: 0.25, 30: 0.1},
+                2080: {13: 0.9, 18: 0.75, 29: 0.5, 39: 0.25, 58: 0.1},
+                2100: {15: 0.9, 22: 0.75, 36: 0.5, 50: 0.25, 75: 0.1}
+            };
 
             flood_zones.push({
-                "year": year,
-                "inches": inches
+                "year": year,	
+                "inches": inches,
+                "probability": probabilities[year][inches]
             });
         }
     }
@@ -72,8 +80,39 @@ function updateText(flood_zones) {
         ];
 
         document.getElementById("title").innerHTML = underwater_titles[Math.floor(Math.random() * underwater_titles.length)];
+        
+        var probabilities = {2020: 0, 2050: 0, 2080: 0, 2100: 0};
+        
+        for (var i = 0; i < flood_zones.length; i++) {
+            var zone = flood_zones[i];
+            if (probabilities[zone.year] < zone.probability) {
+                probabilities[zone.year] = zone.probability;
+            }
+        }
+        
+        if (probabilities[2020] == 0.9) {
+            document.getElementById("status").innerHTML = "You're already underwater.";
+            return;
+        }
+        
+        var probability_objects = [];
+        
+        for (var year in probabilities) {
+            if (probabilities[year] > 0) {
+                probability_objects.push({year: year, probability: probabilities[year]})
+            }
+        }
+        
+        for (var i = 0; i < probability_objects.length; i++) {
+            var probability = probability_objects[i].probability;
+            if (probability > 0) {
+                document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged by the year " + probability_objects[i].year + ".";
+                break;
+            }
+        }
     } else {
-        document.getElementById("title").innerHTML = "You should be safe"
+        document.getElementById("title").innerHTML = "You should be safe";
+        document.getElementById("status").innerHTML = "You'll be okay... for now.";
     }
 }
 
