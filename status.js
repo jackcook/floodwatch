@@ -328,3 +328,15 @@ function fillInAddress() {
 
     location.href = "status.html?lat=" + lat + "&lng=" + lng + "&q=" + name;
 }
+
+var checkboxes = Array.from(document.getElementsByTagName("input")).filter(function(elem) {
+    return elem.getAttribute("type") == "checkbox";
+});
+
+for (var i = 0; i < checkboxes.length; i++) {
+    var checkbox = checkboxes[i];
+    checkbox.value = localStorage.getItem(checkbox.name) ? "on" : "off";
+    checkbox.addEventListener("change", function(event) {
+        localStorage.setItem(event.target.name, event.target.value == "on");
+    });
+}
