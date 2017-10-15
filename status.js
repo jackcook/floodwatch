@@ -7,6 +7,7 @@ var lat = parseFloat(url.searchParams.get("lat"));
 var lng = parseFloat(url.searchParams.get("lng"));
 
 var currentCoords = {};
+var loadingGifUrls = [];
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -31,6 +32,8 @@ map.on("click", function (e) {
 });
 
 function checkStatus(coordinates) {
+    showLoadingGif();
+    
     if (map.getLayer(locationPointId)) {
         map.removeLayer(locationPointId);
     }
@@ -275,3 +278,26 @@ function calculateRoute(from, to, callback) {
         callback(minutes);
     });
 }
+
+function fetchLoadingGifs() {
+    var offset = Math.floor(Math.random() * 50);
+    var req = new XMLHttpRequest();
+    req.open("GET", "https://api.giphy.com/v1/gifs/search?api_key=Zfa9rq145Mi27M0tk4SidKkliNxDl11v&q=loading&limit=50&rating=G&lang=en");
+    req.send();
+    
+    req.onload = function() {
+        var data = JSON.parse(req.responseText)["data"];
+        
+        for (var i = 0; i < data.length; i++) {
+            var imageUrl = data[i]["images"]["original"]["url"];
+            loadingGifUrls.push(imageUrl);
+        }
+    };
+}
+
+function showLoadingGif() {
+    var imageUrl = loadingGifUrls[Math.floor(Math.random() * loadingGifUrls.length)];
+    document.getElementById("loading").setAttribute("src", imageUrl);
+}
+
+fetchLoadingGifs();
