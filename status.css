@@ -38,6 +38,21 @@ h3 {
     font-family: Arial;
     font-size: 40px;
     font-weight: bolder;
-    margin: 200px 100px;
+    margin: 200px 100px 0px;
+    text-align: center;
+}
+
+h4{
+    font-family: Arial;
+    font-size: 30px;
+    font-weight: bolder;
+    margin: 30px 80px 10px;
+    text-align: center;
+}
+
+p{
+    font-family: Arial;
+    font-size: 20px;
+    margin: 1px 70px;
     text-align: center;
 }
