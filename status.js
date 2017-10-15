@@ -224,7 +224,7 @@ function generateShelters() {
             features.push({
                 type: "Feature",
                 properties: {
-                    description: shelter.name + "<br>" + shelter.address,
+                    description: "<strong>" + shelter.name + "</strong><br>" + shelter.address,
                     icon: "hospital"
                 },
                 geometry: {
