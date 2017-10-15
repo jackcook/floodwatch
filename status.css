@@ -65,9 +65,14 @@ body {
     display: block;
 }
 
+.fb-share-button {
+    display: block;
+    margin: 32px auto;
+}
+
 .twitter-share-button {
     display: block;
-    margin: 16px auto 0;
+    margin: 8px auto;
 }
 
 input[type=checkbox] {
