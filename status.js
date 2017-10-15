@@ -25,7 +25,29 @@ map.on('load', function () {
 });
 
 map.on("click", function (e) {
+    var features = map.queryRenderedFeatures(e.point);
+    
+    for (var i = 0; i < features.length; i++) {
+        var feature = features[i];
+        if (feature.layer.id == "places") {
+            new mapboxgl.Popup()
+                .setLngLat(feature.geometry.coordinates)
+                .setHTML(feature.properties.description)
+                .addTo(map);
+            return;
+        }
+    }
+    
+    // Move to this point if no place was selected
     checkStatus(e.lngLat);
+});
+
+map.on("mouseenter", "places", function () {
+    map.getCanvas().style.cursor = "pointer";
+});
+
+map.on("mouseleave", "places", function () {
+    map.getCanvas().style.cursor = "";
 });
 
 function checkStatus(coordinates) {
@@ -178,6 +200,7 @@ function generateShelters() {
     evacuationRequest.send(async=false);
 
     evacuationRequest.onload = function() {
+        var features = [];
         var shelterData = JSON.parse(evacuationRequest.responseText)["data"];
         
         for (var i = 0; i < shelterData.length; i++) {
@@ -188,7 +211,7 @@ function generateShelters() {
             var matches = geometry.match(coordinate_regex);
             
             var coords = {lat: parseFloat(matches[2]), lng: parseFloat(matches[1])};
-            addPoint("shelter", coords, "hospital-15");
+            // addPoint("shelter", coords, "hospital-15");
             
             var shelter = {
                 coordinates: coords,
@@ -197,7 +220,35 @@ function generateShelters() {
             }
             
             shelters.push(shelter);
+            
+            features.push({
+                type: "Feature",
+                properties: {
+                    description: shelter.name + "<br>" + shelter.address,
+                    icon: "hospital"
+                },
+                geometry: {
+                    type: "Point",
+                    coordinates: [coords.lng, coords.lat]
+                }
+            });
         }
+        
+        map.addLayer({
+            "id": "places",
+            "type": "symbol",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": features
+                }
+            },
+            "layout": {
+                "icon-image": "{icon}-15",
+                "icon-allow-overlap": true
+            }
+        });
         
         var originalCoordinates = {lat: origLat, lng: origLng};
         checkStatus(originalCoordinates);

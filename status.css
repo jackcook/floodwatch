@@ -23,6 +23,21 @@ body {
     height: 320px;
 }
 
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.mapboxgl-popup-content {
+    padding: 14px 12px 12px;
+    text-align: center;
+}
+
+.mapboxgl-popup-close-button {
+    height: 16px;
+    width: 16px;
+}
+
 #searchbar {
     float: left;
     position: relative;
