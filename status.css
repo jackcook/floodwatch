@@ -65,6 +65,11 @@ body {
     display: block;
 }
 
+.twitter-share-button {
+    display: block;
+    margin: 16px auto 0;
+}
+
 input[type=checkbox] {
     margin-right: 8px;
 }

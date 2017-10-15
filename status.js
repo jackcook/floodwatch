@@ -97,6 +97,7 @@ function checkStatus(coordinates) {
     updateText(flood_zones);
     
     displayAnimatedImage(flood_zones.length > 0);
+    updateTwitterButton();
 }
 
 function updateText(flood_zones) {
@@ -339,4 +340,20 @@ for (var i = 0; i < checkboxes.length; i++) {
     checkbox.addEventListener("change", function(event) {
         localStorage.setItem(event.target.name, event.target.checked);
     });
+}
+
+function updateTwitterButton() {
+    var twitterButton = document.getElementsByClassName("twitter-share-button")[0];
+    twitterButton.parentNode.removeChild(twitterButton);
+    
+    var newTwitterButton = document.createElement("a");
+    newTwitterButton.setAttribute("class", "twitter-share-button");
+    newTwitterButton.setAttribute("href", "https://twitter.com/intent/tweet");
+    newTwitterButton.setAttribute("data-size", "large");
+    newTwitterButton.setAttribute("data-text", "Looks like I'm safe from flooding in NYC for the next 100 years! Check your status at floodwatch.co!");
+    newTwitterButton.setAttribute("data-url", "https://jackcook.github.io/floodwatch/status.html?lat=" + currentCoords.lat + "&lng=" + currentCoords.lng);
+    
+    var image = document.getElementById("animated");
+    image.parentNode.insertBefore(newTwitterButton, image.nextSibling);
+    twttr.widgets.load();
 }
