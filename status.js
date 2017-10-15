@@ -83,7 +83,8 @@ function updateText(flood_zones) {
     if (flood_zones.length > 0) {
         var underwater_titles = [
             "We hope you're taking swimming lessons",
-            "Have you bought your life raft yet?"
+            "Have you bought your life raft yet?",
+            "Get ready to dive in"
         ];
 
         document.getElementById("title").innerHTML = underwater_titles[Math.floor(Math.random() * underwater_titles.length)];
@@ -123,6 +124,7 @@ function updateText(flood_zones) {
                 var shelterCoords = findNearestShelter();
                 calculateRoute(currentCoords, shelterCoords, function(minutes) {
                     document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes " + minutes + " minutes by car. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
+                    document.getElementById("status").style.textAlign = "justify";
                 });
 
                 break;
@@ -131,6 +133,7 @@ function updateText(flood_zones) {
     } else {
         document.getElementById("title").innerHTML = "It looks like you're safe";
         document.getElementById("status").innerHTML = "You'll be okay... for now.";
+        document.getElementById("status").style.textAlign = "center";
     }
 }
 
