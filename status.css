@@ -65,19 +65,22 @@ body {
     display: block;
 }
 
+#social-container {
+    margin-top: 32px;
+    text-align: center;
+}
+
 .fb-share-button {
     display: inline-block;
-    margin-right: 8px;
+    margin-right: 4px;
     text-align: center;
+    vertical-align: top;
 }
 
 .twitter-share-button {
     display: inline-block;
-    margin: 32px auto 8px;
-}
-
-#social-container {
-    text-align: center;
+    margin-left: 4px;
+    vertical-align: top;
 }
 
 input[type=checkbox] {
