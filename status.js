@@ -7,7 +7,6 @@ var lat = parseFloat(url.searchParams.get("lat"));
 var lng = parseFloat(url.searchParams.get("lng"));
 
 var currentCoords = {};
-var shelterCoords = {};
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -17,14 +16,14 @@ var map = new mapboxgl.Map({
     minZoom: 11
 });
 
-var point_feature_id = 0;
+var locationPointId = "";
 
 map.addControl(new mapboxgl.NavigationControl());
 
 map.on('load', function () {
     var coordinates = {lat: lat, lng: lng};
     checkStatus(coordinates);
-    findShelter(false);
+    generateShelters();
 });
 
 map.on("click", function (e) {
@@ -32,12 +31,11 @@ map.on("click", function (e) {
 });
 
 function checkStatus(coordinates) {
-    if (map.getLayer("location" + point_feature_id)) {
-        map.removeLayer("location" + point_feature_id);
-        point_feature_id += 1;
+    if (map.getLayer(locationPointId)) {
+        map.removeLayer(locationPointId);
     }
 
-    addPoint("location" + point_feature_id, coordinates, "star-15");
+    locationPointId = addPoint("location", coordinates, "star-15");
 
     var point = map.project({lat: coordinates.lat, lng: coordinates.lng});
     var features = map.queryRenderedFeatures(point);
@@ -70,6 +68,8 @@ function checkStatus(coordinates) {
             });
         }
     }
+    
+    currentCoords = coordinates;
 
     moveToPoint(coordinates);
     updateText(flood_zones);
@@ -116,7 +116,7 @@ function updateText(flood_zones) {
                     year_text = "<strong>in three years</strong>";
                 }
                 
-                document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes 24 minutes. (<a href=\"#\" onclick=\"findShelter(true)\">See on map</a>)";
+                document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes 24 minutes. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
                 break;
             }
         }
@@ -127,8 +127,10 @@ function updateText(flood_zones) {
 }
 
 function addPoint(id, coordinates, icon) {
+    var random_num = Math.random() * 1000000;
+    
     map.addLayer({
-        "id": id,
+        "id": id + random_num,
         "type": "symbol",
         "source": {
             "type": "geojson",
@@ -144,6 +146,8 @@ function addPoint(id, coordinates, icon) {
             "icon-image": icon
         }
     });
+    
+    return id + random_num;
 }
 
 function moveToPoint(coordinates) {
@@ -217,27 +221,31 @@ var coordinates = [
     [-74.07901917090253, 40.64282884762186]
 ];
 
-function findShelter(move) {
-    if (move) {
-        moveToPoint(shelterCoords);
-        return;
+function generateShelters() {
+    for (var i in coordinates) {
+        var coords = {lat: coordinates[i][1], lng: coordinates[i][0]};
+        addPoint("shelter", coords, "hospital-15");
     }
-    
+}
+
+function panToClosestShelter() {
     var minX, minY = 0;
     var min = Number.MAX_SAFE_INTEGER;
 
     for (var i in coordinates) {
-        var x = coordinates[i][0] - lng;
-        var y = coordinates[i][1] - lat;
+        var coords = {lat: coordinates[i][1], lng: coordinates[i][0]};
+        addPoint("shelter", coords, "hospital-15");
+        
+        var x = coords.lng - currentCoords.lng;
+        var y = coords.lat - currentCoords.lat;
         var distance = Math.sqrt(x*x + y*y);
 
         if (distance < min) {
             min = distance;
-            minX = coordinates[i][0];
-            minY = coordinates[i][1];
+            minX = coords.lng;
+            minY = coords.lat;
         }
     }
-
-    shelterCoords = {lat: minY, lng: minX};
-    addPoint("shelter", shelterCoords, "hospital-15");
+    
+    moveToPoint({lat: minY, lng: minX});
 }
