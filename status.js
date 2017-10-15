@@ -63,7 +63,12 @@ function checkStatus(coordinates) {
         }
     }
     
-    map.panTo(coordinates);
+    if (map.getZoom() == 13) {
+        map.panTo(coordinates);
+    } else {
+        map.flyTo({center: coordinates, zoom: 13});
+    }
+    
     updateText(underwater);
 }
 
