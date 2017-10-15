@@ -335,8 +335,8 @@ var checkboxes = Array.from(document.getElementsByTagName("input")).filter(funct
 
 for (var i = 0; i < checkboxes.length; i++) {
     var checkbox = checkboxes[i];
-    checkbox.value = localStorage.getItem(checkbox.name) ? "on" : "off";
+    checkbox.checked = localStorage.getItem(checkbox.name);
     checkbox.addEventListener("change", function(event) {
-        localStorage.setItem(event.target.name, event.target.value == "on");
+        localStorage.setItem(event.target.name, event.target.checked);
     });
 }
