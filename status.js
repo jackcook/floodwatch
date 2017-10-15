@@ -34,7 +34,7 @@ function checkStatus(coordinates) {
         point_feature_id += 1;
     }
 
-    addPoint("location" + point_feature_id, coordinates);
+    addPoint("location" + point_feature_id, coordinates, "circle-15");
 
     var point = map.project({lat: coordinates.lat, lng: coordinates.lng});
     var features = map.queryRenderedFeatures(point);
@@ -49,13 +49,13 @@ function checkStatus(coordinates) {
         var dcp_regex = /dcp-wos-slr(\d{4})s(\d{2})in-[\w]{6}/;
         var matches = id.match(dcp_regex);
 
-        if (matches && matches.length == 3) {		
-            var year = parseInt(matches[1]);		
-            var inches = parseInt(matches[2]);		
+        if (matches && matches.length == 3) {
+            var year = parseInt(matches[1]);
+            var inches = parseInt(matches[2]);
 
-            flood_zones.push({		
-                "year": year,		
-                "inches": inches		
+            flood_zones.push({
+                "year": year,
+                "inches": inches
             });
         }
     }
@@ -70,14 +70,14 @@ function updateText(flood_zones) {
             "We hope you're taking swimming lessons",
             "Have you bought your life raft yet?"
         ];
-        
+
         document.getElementById("title").innerHTML = underwater_titles[Math.floor(Math.random() * underwater_titles.length)];
     } else {
         document.getElementById("title").innerHTML = "You should be safe"
     }
 }
 
-function addPoint(id, coordinates) {
+function addPoint(id, coordinates, icon) {
     map.addLayer({
         "id": id,
         "type": "symbol",
@@ -92,7 +92,7 @@ function addPoint(id, coordinates) {
             }
         },
         "layout": {
-            "icon-image": "circle-15"
+            "icon-image": icon
         }
     });
 }
@@ -171,7 +171,7 @@ var coordinates = [
 function findClosestShelter() {
     var minX, minY = 0;
     var min = Number.MAX_SAFE_INTEGER;
-    
+
     for (var i in coordinates) {
         var x = coordinates[i][0] - lng;
         var y = coordinates[i][1] - lat;
@@ -184,10 +184,10 @@ function findClosestShelter() {
         }
     }
 
-    addPoint("shelter", {lat: minY, lng: minX});
+    addPoint("shelter", {lat: minY, lng: minX}, "hospital-15");
 
     // var midpointX = (minX + lng)/2;
     // var midpointY = (minY + lat)/2;
-    // 
+    //
     // moveToPoint({lat: midpointY, lng: midpointX});
 }
