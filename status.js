@@ -19,7 +19,7 @@ map.on('load', function () {
     var coordinates = {lat: lat, lng: lng};
     checkStatus(coordinates);
 
-    closestShelter();
+    findClosestShelter();
 });
 
 map.on("click", function (e) {
@@ -32,23 +32,7 @@ function checkStatus(coordinates) {
         point_feature_id += 1;
     }
 
-    map.addLayer({
-        "id": "location" + point_feature_id,
-        "type": "symbol",
-        "source": {
-            "type": "geojson",
-            "data": {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [coordinates.lng, coordinates.lat]
-                }
-            }
-        },
-        "layout": {
-            "icon-image": "circle-15"
-        }
-    });
+    addPoint("location" + point_feature_id, coordinates);
 
     var point = map.project({lat: coordinates.lat, lng: coordinates.lng});
     var features = map.queryRenderedFeatures(point);
@@ -66,7 +50,7 @@ function checkStatus(coordinates) {
         if (matches && matches.length == 3) {		
             var year = parseInt(matches[1]);		
             var inches = parseInt(matches[2]);		
-            		
+
             flood_zones.push({		
                 "year": year,		
                 "inches": inches		
@@ -74,12 +58,7 @@ function checkStatus(coordinates) {
         }
     }
 
-    if (map.getZoom() == 13) {
-        map.panTo(coordinates);
-    } else {
-        map.flyTo({center: coordinates, zoom: 13});
-    }
-
+    moveToPoint(coordinates);
     updateText(flood_zones);
 }
 
@@ -93,6 +72,34 @@ function updateText(flood_zones) {
         document.getElementById("title").innerHTML = underwater_titles[Math.floor(Math.random() * underwater_titles.length)];
     } else {
         document.getElementById("title").innerHTML = "You should be safe"
+    }
+}
+
+function addPoint(id, coordinates) {
+    map.addLayer({
+        "id": id,
+        "type": "symbol",
+        "source": {
+            "type": "geojson",
+            "data": {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [coordinates.lng, coordinates.lat]
+                }
+            }
+        },
+        "layout": {
+            "icon-image": "circle-15"
+        }
+    });
+}
+
+function moveToPoint(coordinates) {
+    if (map.getZoom() == 13) {
+        map.panTo(coordinates);
+    } else {
+        map.flyTo({center: coordinates, zoom: 13});
     }
 }
 
@@ -159,12 +166,13 @@ var coordinates = [
     [-74.07901917090253, 40.64282884762186]
 ];
 
-function closestShelter() {
+function findClosestShelter() {
     var minX, minY = 0;
     var min = Number.MAX_SAFE_INTEGER;
-    for (var i in coordinates){
-        var x = (coordinates[i][0] - lng);
-        var y = (coordinates[i][1] - lat);
+    
+    for (var i in coordinates) {
+        var x = coordinates[i][0] - lng;
+        var y = coordinates[i][1] - lat;
         var distance = Math.sqrt(x*x + y*y);
 
         if (distance < min) {
@@ -174,27 +182,10 @@ function closestShelter() {
         }
     }
 
-    map.addLayer({
-        "id": "shelter",
-        "type": "symbol",
-        "source": {
-            "type": "geojson",
-            "data": {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [minX, minY]
-                }
-            }
-        },
-        "layout": {
-            "icon-image": "circle-15"
-        }
-    });
+    addPoint("shelter", {lat: minY, lng: minX});
 
-    var midpointX = (minX + lng)/2;
-    var midpointY = (minY + lat)/2;
-
-    console.log(minX, minY);
-
+    // var midpointX = (minX + lng)/2;
+    // var midpointY = (minY + lat)/2;
+    // 
+    // moveToPoint({lat: midpointY, lng: midpointX});
 }
