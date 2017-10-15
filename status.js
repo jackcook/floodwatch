@@ -97,7 +97,7 @@ function checkStatus(coordinates) {
     updateText(flood_zones);
     
     displayAnimatedImage(flood_zones.length > 0);
-    updateTwitterButton();
+    updateTwitterButton(flood_zones.length > 0);
 }
 
 function updateText(flood_zones) {
@@ -156,7 +156,13 @@ function updateText(flood_zones) {
             }
         }
     } else {
-        document.getElementById("title").innerHTML = "It looks like you're safe";
+        var safe_titles = [
+            "It looks like you're safe",
+            "I guess you're lucky...",
+            "You won't need that towel"
+        ];
+        
+        document.getElementById("title").innerHTML = safe_titles[Math.floor(Math.random() * safe_titles.length)];
         document.getElementById("status").innerHTML = "You'll be okay... for now.";
         document.getElementById("status").style.textAlign = "center";
         document.getElementById("text").style.display = "none";
@@ -345,7 +351,7 @@ for (var i = 0; i < checkboxes.length; i++) {
     });
 }
 
-function updateTwitterButton() {
+function updateTwitterButton(flooded) {
     var twitterButton = document.getElementsByClassName("twitter-share-button")[0];
     twitterButton.parentNode.removeChild(twitterButton);
     
@@ -353,7 +359,13 @@ function updateTwitterButton() {
     newTwitterButton.setAttribute("class", "twitter-share-button");
     newTwitterButton.setAttribute("href", "https://twitter.com/intent/tweet");
     newTwitterButton.setAttribute("data-size", "large");
-    newTwitterButton.setAttribute("data-text", "Looks like I'm safe from flooding in NYC for the next 100 years! Check your status at floodwatch.xyz!");
+    
+    if (flooded) {
+        newTwitterButton.setAttribute("data-text", "I might be at risk for flooding in NYC in the near future. Check your status at floodwatch.xyz");
+    } else {
+        newTwitterButton.setAttribute("data-text", "Looks like I'm safe from flooding in NYC for the next 100 years! Check your status at floodwatch.xyz!");
+    }
+    
     newTwitterButton.setAttribute("data-url", "http://floodwatch.xyz/status.html?lat=" + currentCoords.lat + "&lng=" + currentCoords.lng);
     
     var socialContainer = document.getElementById("social-container");
