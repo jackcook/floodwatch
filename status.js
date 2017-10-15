@@ -6,16 +6,32 @@ var lng = parseFloat(url.searchParams.get("lng"));
 
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/jackcook36/cj8roqx69bon22rpf45j7b5zp',
+    style: 'mapbox://styles/jackcook36/cj8s0ki30748b2rmi7mmcmg0t',
     center: [lng, lat],
     zoom: 13
 });
 
+var point_feature_id = 0;
+
 map.addControl(new mapboxgl.NavigationControl());
 
 map.on('load', function () {
+    var coordinates = {lat: lat, lng: lng};
+    checkStatus(coordinates);
+});
+
+map.on("click", function (e) {
+    checkStatus(e.lngLat);
+});
+
+function checkStatus(coordinates) {
+    if (map.getLayer("location" + point_feature_id)) {
+        map.removeLayer("location" + point_feature_id);
+        point_feature_id += 1;
+    }
+    
     map.addLayer({
-        "id": "location",
+        "id": "location" + point_feature_id,
         "type": "symbol",
         "source": {
             "type": "geojson",
@@ -23,7 +39,7 @@ map.on('load', function () {
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [lng, lat]
+                    "coordinates": [coordinates.lng, coordinates.lat]
                 }
             }
         },
@@ -32,7 +48,7 @@ map.on('load', function () {
         }
     });
     
-    var point = map.project({lat: lat, lng: lng});
+    var point = map.project({lat: coordinates.lat, lng: coordinates.lng});
     var features = map.queryRenderedFeatures(point);
     
     var underwater = false;
@@ -41,14 +57,15 @@ map.on('load', function () {
         var feature = features[i];
         var id = feature["layer"]["id"];
         
-        if (features[i]["layer"]["id"] == "dcp-wos-slr2020s02in-6g5vyq") {
+        if (features[i]["layer"]["id"] == "dcp-wos-slr2100s75in-72a32u") {
             underwater = true;
             break;
         }
     }
     
+    map.panTo(coordinates);
     updateText(underwater);
-});
+}
 
 function updateText(underwater) {
     if (underwater) {
