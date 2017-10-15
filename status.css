@@ -66,13 +66,13 @@ body {
 }
 
 .fb-share-button {
-    display: block;
-    margin: 32px auto;
+    display: block !important;
+    text-align: center;
 }
 
 .twitter-share-button {
     display: block;
-    margin: 8px auto;
+    margin: 32px auto 8px;
 }
 
 input[type=checkbox] {
