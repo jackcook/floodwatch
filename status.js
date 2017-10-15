@@ -353,8 +353,8 @@ function updateTwitterButton() {
     newTwitterButton.setAttribute("class", "twitter-share-button");
     newTwitterButton.setAttribute("href", "https://twitter.com/intent/tweet");
     newTwitterButton.setAttribute("data-size", "large");
-    newTwitterButton.setAttribute("data-text", "Looks like I'm safe from flooding in NYC for the next 100 years! Check your status at floodwatch.co!");
-    newTwitterButton.setAttribute("data-url", "https://jackcook.github.io/floodwatch/status.html?lat=" + currentCoords.lat + "&lng=" + currentCoords.lng);
+    newTwitterButton.setAttribute("data-text", "Looks like I'm safe from flooding in NYC for the next 100 years! Check your status at floodwatch.xyz!");
+    newTwitterButton.setAttribute("data-url", "http://floodwatch.xyz/status.html?lat=" + currentCoords.lat + "&lng=" + currentCoords.lng);
     
     var socialContainer = document.getElementById("social-container");
     socialContainer.appendChild(newTwitterButton);

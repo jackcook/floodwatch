@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Check your flood risk in NYC and determine your proximity to the nearest hurricane shelter." />
+    <meta property="og:url" content="http://floodwatch.xyz" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Flood Watch" />
+    <meta property="og:description" content="Check your flood risk in NYC and determine your proximity to the nearest hurricane shelter." />
+    <title>Flood Watch – Status</title>
+    <link href="status.css" rel="stylesheet">
+    <script src="twitter.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css" rel="stylesheet" />
-    <script src="twitter.js"></script>
-    <link href="status.css" rel="stylesheet">
-    <title>Status</title>
 </head>
 <body>
     <!-- Load Facebook JavaScript SDK -->
@@ -27,7 +33,7 @@
             <p id="status"></p>
             <img id="animated" />
             <div id="social-container">
-                <div class="fb-share-button" data-href="https://jackcook.github.io/floodwatch/" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjackcook.github.io%2Ffloodwatch%2F&amp;src=sdkpreparse">Share</a></div>
+                <div class="fb-share-button" data-href="http://floodwatch.xyz" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ffloodwatch.xyz&amp;src=sdkpreparse">Share</a></div>
                 <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large">Tweet</a>
             </div>
             <div id="text">
