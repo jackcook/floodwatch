@@ -23,8 +23,10 @@ function initAutocomplete() {
 
 function fillInAddress() {
     var place = autocomplete.getPlace();
+    
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
+    var name = document.getElementById("searchbar").value;
 
-    location.href = "status.html?lat=" + lat + "&lng=" + lng;
+    location.href = "status.html?lat=" + lat + "&lng=" + lng + "&q=" + name;
 }

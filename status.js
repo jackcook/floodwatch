@@ -6,6 +6,8 @@ var url = new URL(window.location.href);
 var origLat = parseFloat(url.searchParams.get("lat"));
 var origLng = parseFloat(url.searchParams.get("lng"));
 
+document.getElementById("searchbar").value = url.searchParams.get("q");
+
 var currentCoords = {};
 
 var map = new mapboxgl.Map({
@@ -319,8 +321,10 @@ function initAutocomplete() {
 
 function fillInAddress() {
     var place = autocomplete.getPlace();
+    
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
+    var name = document.getElementById("searchbar").value;
 
-    location.href = "status.html?lat=" + lat + "&lng=" + lng;
+    location.href = "status.html?lat=" + lat + "&lng=" + lng + "&q=" + name;
 }
