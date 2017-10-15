@@ -51,9 +51,9 @@ function checkStatus(coordinates) {
         var matches = id.match(dcp_regex);
 
         if (matches && matches.length == 3) {
-            var year = parseInt(matches[1]);	
+            var year = parseInt(matches[1]);
             var inches = parseInt(matches[2]);
-            
+
             var probabilities = {
                 2020: {2: 0.9, 4: 0.75, 6: 0.5, 8: 0.25, 10: 0.1},
                 2050: {8: 0.9, 11: 0.75, 16: 0.5, 21: 0.25, 30: 0.1},
@@ -62,13 +62,13 @@ function checkStatus(coordinates) {
             };
 
             flood_zones.push({
-                "year": year,	
+                "year": year,
                 "inches": inches,
                 "probability": probabilities[year][inches]
             });
         }
     }
-    
+
     currentCoords = coordinates;
 
     moveToPoint(coordinates);
@@ -76,6 +76,8 @@ function checkStatus(coordinates) {
 }
 
 function updateText(flood_zones) {
+    document.getElementById("status").innerHTML = "Loading...";
+
     if (flood_zones.length > 0) {
         var underwater_titles = [
             "We hope you're taking swimming lessons",
@@ -83,40 +85,44 @@ function updateText(flood_zones) {
         ];
 
         document.getElementById("title").innerHTML = underwater_titles[Math.floor(Math.random() * underwater_titles.length)];
-        
+
         var probabilities = {2020: 0, 2050: 0, 2080: 0, 2100: 0};
-        
+
         for (var i = 0; i < flood_zones.length; i++) {
             var zone = flood_zones[i];
             if (probabilities[zone.year] < zone.probability) {
                 probabilities[zone.year] = zone.probability;
             }
         }
-        
+
         if (probabilities[2020] == 0.9) {
             document.getElementById("status").innerHTML = "You're already underwater.";
             return;
         }
-        
+
         var probability_objects = [];
-        
+
         for (var year in probabilities) {
             if (probabilities[year] > 0) {
                 probability_objects.push({year: year, probability: probabilities[year]})
             }
         }
-        
+
         for (var i = 0; i < probability_objects.length; i++) {
             var probability = probability_objects[i].probability;
             var year = probability_objects[i].year;
             if (probability > 0) {
                 var year_text = "by the year " + probability_objects[i].year;
-                
+
                 if (year == 2020) {
                     year_text = "<strong>in three years</strong>";
                 }
-                
-                document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes 24 minutes. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
+
+                var shelterCoords = findNearestShelter();
+                calculateRoute(currentCoords, shelterCoords, function(minutes) {
+                    document.getElementById("status").innerHTML = "We are " + (probability * 100) + "% certain that you will be submerged " + year_text + ". However, flash flooding could cause the sea level to temporarily rise even sooner than that. In case that happens, you should be mindful of the nearest hurricane shelter. The fastest route there takes " + minutes + " minutes by car. (<a href=\"#\" onclick=\"panToClosestShelter()\">See on map</a>)";
+                });
+
                 break;
             }
         }
@@ -128,7 +134,7 @@ function updateText(flood_zones) {
 
 function addPoint(id, coordinates, icon) {
     var random_num = Math.random() * 1000000;
-    
+
     map.addLayer({
         "id": id + random_num,
         "type": "symbol",
@@ -146,7 +152,7 @@ function addPoint(id, coordinates, icon) {
             "icon-image": icon
         }
     });
-    
+
     return id + random_num;
 }
 
@@ -228,14 +234,14 @@ function generateShelters() {
     }
 }
 
-function panToClosestShelter() {
+function findNearestShelter() {
     var minX, minY = 0;
     var min = Number.MAX_SAFE_INTEGER;
 
     for (var i in coordinates) {
         var coords = {lat: coordinates[i][1], lng: coordinates[i][0]};
         addPoint("shelter", coords, "hospital-15");
-        
+
         var x = coords.lng - currentCoords.lng;
         var y = coords.lat - currentCoords.lat;
         var distance = Math.sqrt(x*x + y*y);
@@ -246,6 +252,26 @@ function panToClosestShelter() {
             minY = coords.lat;
         }
     }
-    
-    moveToPoint({lat: minY, lng: minX});
+
+    return {lat: minY, lng: minX};
+}
+
+function panToClosestShelter() {
+    var coordinates = findNearestShelter();
+    moveToPoint(coordinates);
+}
+
+function calculateRoute(from, to, callback) {
+    var start = from.lat + "," + from.lng;
+    var end = to.lat + "," + to.lng;
+    var request = {
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING'
+    };
+
+    new google.maps.DirectionsService().route(request, function(result, status) {
+        var minutes = parseInt(result.routes[0].legs[0].duration.value / 60);
+        callback(minutes);
+    });
 }
