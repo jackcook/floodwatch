@@ -8,29 +8,45 @@
     </head>
     <body>
         <div>
-            <select id="year">
-                <option value="cj8roqx69bon22rpf45j7b5zp">2020-2in</option>
-                <option value="cj8rpspqm46nc2smyxpm8yka3">2020-10in</option>
-                <option value="cj8rqhq4hbp1u2rk5xz65r6u4">2100-36in</option>
-            </select>
         </div>
         <div id='map'></div>
+        <input id="searchbar" placeholder="Enter your address" type="text"></input>
+        <select id="year-dropdown">
+            <option value="cj8roqx69bon22rpf45j7b5zp">2020-2in</option>
+            <option value="cj8rpspqm46nc2smyxpm8yka3">2020-10in</option>
+            <option value="cj8rqhq4hbp1u2rk5xz65r6u4">2100-36in</option>
+        </select>
         <script>
-            mapboxgl.accessToken = 'pk.eyJ1IjoiamFja2Nvb2szNiIsImEiOiJjajhybmFpZmQweG45MndxaTA5bWZzdHM0In0.TMB_ZQ0YiCwQNjA3ihOQ4A';
-            var map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/jackcook36/cj8rqhq4hbp1u2rk5xz65r6u4',
-                center: [-73.9654, 40.7829],
-                zoom: 10
-            });
-            map.addControl(new mapboxgl.NavigationControl());
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamFja2Nvb2szNiIsImEiOiJjajhybmFpZmQweG45MndxaTA5bWZzdHM0In0.TMB_ZQ0YiCwQNjA3ihOQ4A';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/jackcook36/cj8rqhq4hbp1u2rk5xz65r6u4',
+            center: [-73.9654, 40.7829],
+            zoom: 10
+        });
+        map.addControl(new mapboxgl.NavigationControl());
 
-            var yearSelector = document.getElementById("year");
-            yearSelector.onchange = function(selection) {
-                var styleId = selection.target[selection.target.selectedIndex].value;
-                map.setStyle('mapbox://styles/jackcook36/' + styleId);
-            };
+        var yearSelector = document.getElementById("year-dropdown");
+        yearSelector.onchange = function(selection) {
+            var styleId = selection.target[selection.target.selectedIndex].value;
+            map.setStyle('mapbox://styles/jackcook36/' + styleId);
+        };
+
+        var autocomplete;
+        
+        function initAutocomplete() {
+            autocomplete = new google.maps.places.Autocomplete(document.getElementById('searchbar'), {types: ['geocode']});
+            autocomplete.addListener('place_changed', fillInAddress);
+        }
+
+        function fillInAddress() {
+            var place = autocomplete.getPlace();
+            var lat = place.geometry.location.lat();
+            var lng = place.geometry.location.lng();
+            
+            location.href = "status.html?lat=" + lat + "&lng=" + lng;
+        }
         </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwnAQOoV_y2jFzd1pFa-J914I_nqbEqaI&libraries=places&callback=initAutocomplete" async defer></script>
     </body>
-
 </html>
