@@ -24,9 +24,10 @@ h1, h2, h3, h4 {
     text-align: center;
 }
 
-h3, h4 {
+h3{
     background-color: black;
     color: white;
+    padding: 15px;
 }
 
 h1 {
