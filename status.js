@@ -125,6 +125,7 @@ function updateText(flood_zones) {
 
         if (probabilities[2020] == 0.9) {
             document.getElementById("status").innerHTML = "You're already underwater.";
+            document.getElementById("status").style.textAlign = "center";
             return;
         }
 
