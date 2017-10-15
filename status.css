@@ -14,7 +14,7 @@ body {
 
 #container {
     background: #fff;
-    margin: 48px auto;
+    margin: 0 auto;
     width: 1200px;
 }
 
@@ -60,7 +60,7 @@ body {
 }
 
 #animated {
-    height: 256px;
+    height: 192px;
     margin: 36px auto 0;
     display: block;
 }
