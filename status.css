@@ -42,12 +42,16 @@ body {
 #searchbar {
     float: left;
     position: relative;
-    top: -296px;
-    left: 24px;
-    width: 384px;
+    top: -310px;
+    left: 10px;
+    width: 448px;
     height: 42px;
     font-size: 18px;
     padding: 0 12px;
+}
+
+#searchbar:focus {
+    outline: none;
 }
 
 #text-container {

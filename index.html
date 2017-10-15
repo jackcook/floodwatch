@@ -9,11 +9,35 @@
     <body>
         <div id="map"></div>
         <input id="searchbar" placeholder="Enter your address" type="text"></input>
-        <select id="year-dropdown">
-            <option value="cj8roqx69bon22rpf45j7b5zp">2020-2in</option>
-            <option value="cj8rpspqm46nc2smyxpm8yka3">2020-10in</option>
-            <option value="cj8rqhq4hbp1u2rk5xz65r6u4">2100-36in</option>
-        </select>
+        <div id="year-dropdown-bg">
+            <select id="year-dropdown">
+                <option selected="default">Select a flood map...</option>
+                <option disabled>2020</option>
+                <option value="cj8roqx69bon22rpf45j7b5zp">90% Likely</option>
+                <option value="cj8sll6zlcibu2slaxh5n91kh">75% Likely</option>
+                <option value="cj8slnbyqciul2rntfl3vcrk1">50% Likely</option>
+                <option value="cj8slolf4chsg2ss2q7epr9k3">25% Likely</option>
+                <option value="cj8rpspqm46nc2smyxpm8yka3">10% Likely</option>
+                <option disabled>2050</option>
+                <option value="cj8slxshfciu12rntq2ud7jfw">90% Likely</option>
+                <option value="cj8slyw4lcjix2rpfup26lv2q">75% Likely</option>
+                <option value="cj8slzqxccjjd2rphfxlz6c61">50% Likely</option>
+                <option value="cj8sm0u2a50fu2tqqd9s0wtc1">25% Likely</option>
+                <option value="cj8sm1yw5chqa2rpj4k9e9bnv">10% Likely</option>
+                <option disabled>2080</option>
+                <option value="cj8sm41857oj02ss9n2so5sed">90% Likely</option>
+                <option value="cj8sm5qo7cjbc2rnt8f10rejz">75% Likely</option>
+                <option value="cj8sm7ngecipl2rphd6l8pn2j">50% Likely</option>
+                <option value="cj8sm91v8ciyf2qlwd8z4onzu">25% Likely</option>
+                <option value="cj8sm9zm0cj252rugc9ss498k">10% Likely</option>
+                <option disabled>2100</option>
+                <option value="cj8smaklbcj5y2rntlsnw2n74">90% Likely</option>
+                <option value="cj8smbpsicj052sla1jpk6s27">75% Likely</option>
+                <option value="cj8rqhq4hbp1u2rk5xz65r6u4">50% Likely</option>
+                <option disabled>25% Likely</option>
+                <option value="cj8s0ki30748b2rmi7mmcmg0t">10% Likely</option>
+            </select>
+        </div>
         <script src="main.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwnAQOoV_y2jFzd1pFa-J914I_nqbEqaI&libraries=places&callback=initAutocomplete" async defer></script>
     </body>
