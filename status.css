@@ -60,6 +60,10 @@ body {
     padding: 48px 120px;
 }
 
+#text {
+    display: none;
+}
+
 #animated {
     height: 192px;
     margin: 36px auto 0;
