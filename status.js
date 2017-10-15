@@ -353,7 +353,7 @@ function updateTwitterButton() {
     newTwitterButton.setAttribute("data-text", "Looks like I'm safe from flooding in NYC for the next 100 years! Check your status at floodwatch.co!");
     newTwitterButton.setAttribute("data-url", "https://jackcook.github.io/floodwatch/status.html?lat=" + currentCoords.lat + "&lng=" + currentCoords.lng);
     
-    var image = document.getElementById("animated");
-    image.parentNode.insertBefore(newTwitterButton, image.nextSibling);
+    var socialContainer = document.getElementById("social-container");
+    socialContainer.appendChild(newTwitterButton);
     twttr.widgets.load();
 }
