@@ -7,7 +7,6 @@ var lat = parseFloat(url.searchParams.get("lat"));
 var lng = parseFloat(url.searchParams.get("lng"));
 
 var currentCoords = {};
-var loadingGifUrls = [];
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -32,8 +31,6 @@ map.on("click", function (e) {
 });
 
 function checkStatus(coordinates) {
-    showLoadingGif();
-    
     if (map.getLayer(locationPointId)) {
         map.removeLayer(locationPointId);
     }
@@ -76,10 +73,12 @@ function checkStatus(coordinates) {
 
     moveToPoint(coordinates);
     updateText(flood_zones);
+    
+    displayAnimatedImage(flood_zones.length > 0);
 }
 
 function updateText(flood_zones) {
-    document.getElementById("status").innerHTML = "Loading...";
+    document.getElementById("status").innerHTML = "";
 
     if (flood_zones.length > 0) {
         var underwater_titles = [
@@ -130,7 +129,7 @@ function updateText(flood_zones) {
             }
         }
     } else {
-        document.getElementById("title").innerHTML = "You should be safe";
+        document.getElementById("title").innerHTML = "It looks like you're safe";
         document.getElementById("status").innerHTML = "You'll be okay... for now.";
     }
 }
@@ -279,25 +278,16 @@ function calculateRoute(from, to, callback) {
     });
 }
 
-function fetchLoadingGifs() {
+function displayAnimatedImage(flood) {
     var offset = Math.floor(Math.random() * 50);
+    var query = flood ? "flood" : "happy";
+    
     var req = new XMLHttpRequest();
-    req.open("GET", "https://api.giphy.com/v1/gifs/search?api_key=Zfa9rq145Mi27M0tk4SidKkliNxDl11v&q=loading&limit=50&rating=G&lang=en");
+    req.open("GET", "https://api.giphy.com/v1/gifs/search?api_key=Zfa9rq145Mi27M0tk4SidKkliNxDl11v&q=" + query + "&limit=1&offset=" + offset + "&rating=G&lang=en");
     req.send();
     
     req.onload = function() {
-        var data = JSON.parse(req.responseText)["data"];
-        
-        for (var i = 0; i < data.length; i++) {
-            var imageUrl = data[i]["images"]["original"]["url"];
-            loadingGifUrls.push(imageUrl);
-        }
+        var imageUrl = JSON.parse(req.responseText)["data"][0]["images"]["original"]["url"];
+        document.getElementById("animated").setAttribute("src", imageUrl);
     };
 }
-
-function showLoadingGif() {
-    var imageUrl = loadingGifUrls[Math.floor(Math.random() * loadingGifUrls.length)];
-    document.getElementById("loading").setAttribute("src", imageUrl);
-}
-
-fetchLoadingGifs();

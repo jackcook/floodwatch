@@ -20,8 +20,10 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#loading {
+#animated {
     height: 256px;
+    margin: 36px auto 0;
+    display: block;
 }
 
 h1, h2, h3 {
