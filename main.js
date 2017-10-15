@@ -25,6 +25,6 @@ function fillInAddress() {
     var place = autocomplete.getPlace();
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
-    
+
     location.href = "status.html?lat=" + lat + "&lng=" + lng;
 }
