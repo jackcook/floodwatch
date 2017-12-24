@@ -224,9 +224,8 @@ function generateShelters() {
         var shelterData = JSON.parse(evacuationRequest.responseText)["data"];
 
         for (var i = 0; i < shelterData.length; i++) {
-            var shelter = shelterData[i][11];
-            var coords = {lat: shelter.coordinates[0], lng: shelter.coordinates[1]};
-            // addPoint("shelter", coords, "hospital-15");
+            var shelter = shelterData[i];
+            var coords = {lat: shelter[11].coordinates[0], lng: shelter[11].coordinates[1]};
 
             var shelter = {
                 coordinates: coords,
