@@ -28,7 +28,7 @@ map.on('load', function () {
 
 map.on("click", function (e) {
     var features = map.queryRenderedFeatures(e.point);
-    
+
     for (var i = 0; i < features.length; i++) {
         var feature = features[i];
         if (feature.layer.id == "places") {
@@ -39,7 +39,7 @@ map.on("click", function (e) {
             return;
         }
     }
-    
+
     // Move to this point if no place was selected
     checkStatus(e.lngLat);
 });
@@ -95,7 +95,7 @@ function checkStatus(coordinates) {
 
     moveToPoint(coordinates, false);
     updateText(flood_zones);
-    
+
     displayAnimatedImage(flood_zones.length > 0);
     updateTwitterButton(flood_zones.length > 0);
 }
@@ -105,7 +105,7 @@ function updateText(flood_zones) {
 
     if (flood_zones.length > 0) {
         document.getElementById("text").style.display = "block";
-        
+
         var underwater_titles = [
             "We hope you're taking swimming lessons",
             "Have you bought your life raft yet?",
@@ -162,7 +162,7 @@ function updateText(flood_zones) {
             "I guess you're lucky...",
             "You won't need that towel"
         ];
-        
+
         document.getElementById("title").innerHTML = safe_titles[Math.floor(Math.random() * safe_titles.length)];
         document.getElementById("status").innerHTML = "You'll be okay... for now.";
         document.getElementById("status").style.textAlign = "center";
@@ -219,25 +219,20 @@ function generateShelters() {
     evacuationRequest.onload = function() {
         var features = [];
         var shelterData = JSON.parse(evacuationRequest.responseText)["data"];
-        
+
         for (var i = 0; i < shelterData.length; i++) {
-            var shelter = shelterData[i];
-            
-            var geometry = shelter[11];
-            var coordinate_regex = /POINT \(([-\d.]+) ([-\d.]+)\)/;
-            var matches = geometry.match(coordinate_regex);
-            
-            var coords = {lat: parseFloat(matches[2]), lng: parseFloat(matches[1])};
+            var shelter = shelterData[i][11];
+            var coords = {lat: shelter.coordinates[0], lng: shelter.coordinates[1]};
             // addPoint("shelter", coords, "hospital-15");
-            
+
             var shelter = {
                 coordinates: coords,
                 name: shelter[10],
                 address: shelter[8] + ", " + shelter[9] + ", " + shelter[12] + " " + shelter[13]
             }
-            
+
             shelters.push(shelter);
-            
+
             features.push({
                 type: "Feature",
                 properties: {
@@ -250,7 +245,7 @@ function generateShelters() {
                 }
             });
         }
-        
+
         map.addLayer({
             "id": "places",
             "type": "symbol",
@@ -266,7 +261,7 @@ function generateShelters() {
                 "icon-allow-overlap": true
             }
         });
-        
+
         var originalCoordinates = {lat: origLat, lng: origLng};
         checkStatus(originalCoordinates);
     };
@@ -278,7 +273,7 @@ function findNearestShelter() {
 
     for (var i = 0; i < shelters.length; i++) {
         var coords = shelters[i].coordinates;
-        
+
         var x = coords.lng - currentCoords.lng;
         var y = coords.lat - currentCoords.lat;
         var distance = Math.sqrt(x*x + y*y);
@@ -318,11 +313,11 @@ function calculateRoute(from, to, callback) {
 function displayAnimatedImage(flood) {
     var offset = Math.floor(Math.random() * 50);
     var query = flood ? "flood" : "happy";
-    
+
     var req = new XMLHttpRequest();
     req.open("GET", "https://api.giphy.com/v1/gifs/search?api_key=Zfa9rq145Mi27M0tk4SidKkliNxDl11v&q=" + query + "&limit=1&offset=" + offset + "&rating=G&lang=en");
     req.send();
-    
+
     req.onload = function() {
         var imageUrl = JSON.parse(req.responseText)["data"][0]["images"]["original"]["url"];
         document.getElementById("animated").setAttribute("src", imageUrl);
@@ -336,7 +331,7 @@ function initAutocomplete() {
 
 function fillInAddress() {
     var place = autocomplete.getPlace();
-    
+
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
     var name = document.getElementById("searchbar").value;
@@ -359,20 +354,20 @@ for (var i = 0; i < checkboxes.length; i++) {
 function updateTwitterButton(flooded) {
     var twitterButton = document.getElementsByClassName("twitter-share-button")[0];
     twitterButton.parentNode.removeChild(twitterButton);
-    
+
     var newTwitterButton = document.createElement("a");
     newTwitterButton.setAttribute("class", "twitter-share-button");
     newTwitterButton.setAttribute("href", "https://twitter.com/intent/tweet");
     newTwitterButton.setAttribute("data-size", "large");
-    
+
     if (flooded) {
         newTwitterButton.setAttribute("data-text", "I might be at risk for flooding in NYC in the near future. Check your status at floodwatch.xyz");
     } else {
         newTwitterButton.setAttribute("data-text", "Looks like I'm safe from flooding in NYC for the next 100 years! Check your status at floodwatch.xyz!");
     }
-    
+
     newTwitterButton.setAttribute("data-url", "http://floodwatch.xyz/status.html?lat=" + currentCoords.lat + "&lng=" + currentCoords.lng);
-    
+
     var socialContainer = document.getElementById("social-container");
     socialContainer.appendChild(newTwitterButton);
     twttr.widgets.load();
